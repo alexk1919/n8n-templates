@@ -19,17 +19,6 @@ This repository is a collection of powerful **n8n workflows** created and mainta
 - Integrate popular tools and platforms.
 - Optimize workflows using AI and API integrations.
 
-## Workflows
-Here are the available workflows in this repository:
-
-1. Find Emails and Social Media Links in Seconds
-Description: Scrapes email addresses and social media links from a provided URL, filtering relevant domains and company names.
-Tools Used:
-- HTTP Request
-- Google Sheets
-- OpenAI (AI Agent)
-Folder: Find Emails and Social Media Links
-
 ## Contributing
 I welcome contributions! 🎉
 Follow these steps to contribute:

@@ -1,0 +1,495 @@
+{
+  "name": "Dropbox to Minio",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "download",
+        "path": "={{ $json.pathLower }}"
+      },
+      "id": "0cc323cf-795e-4fd1-b610-02919079068c",
+      "name": "Download File",
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1,
+      "position": [
+        760,
+        380
+      ],
+      "credentials": {
+        "dropboxApi": {
+          "id": "Lgz0P6Oe8IoBB66P",
+          "name": "Mack Dropbox account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "bucketName": "={{ $('Set Folders').item.json.minioBucket }}",
+        "fileName": "={{ $json.name }}",
+        "additionalFields": {
+          "grantRead": true,
+          "parentFolderKey": "={{ $('Available Folders').item.json.name }}"
+        }
+      },
+      "id": "9f29d239-fd9e-4d4b-b6bf-15bfd7a89362",
+      "name": "Upload to Minio",
+      "type": "n8n-nodes-base.s3",
+      "typeVersion": 1,
+      "position": [
+        320,
+        600
+      ],
+      "credentials": {
+        "s3": {
+          "id": "zzhSVUbVnnoMksoc",
+          "name": "KBB Minio S3 account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "c23509ca-32b3-4e31-8a9a-5f75b860b4e2",
+      "name": "When clicking ‘Test workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -280,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "bucketName": "={{ $('Set Folders').item.json.minioBucket }}",
+        "returnAll": true,
+        "options": {
+          "folderKey": "={{ $('Available Folders').item.json.name }}/"
+        }
+      },
+      "id": "d06a1f7b-a578-4f1e-8336-e35644b91bee",
+      "name": "Get Files",
+      "type": "n8n-nodes-base.s3",
+      "typeVersion": 1,
+      "position": [
+        540,
+        600
+      ],
+      "credentials": {
+        "s3": {
+          "id": "zzhSVUbVnnoMksoc",
+          "name": "KBB Minio S3 account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e69783f2-1fba-4ae0-b7d8-1bcac67cb10e",
+              "name": "Key",
+              "value": "=https://minio.keneticbb.com/{{ $('Set Folders').item.json.minioBucket }}/{{ $json.Key }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "d736b9b9-0ebb-401c-977f-8c331e4c1a5b",
+      "name": "File URL",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        760,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d4037d0f-5efc-4a2c-aa5a-079744f533ae",
+              "name": "type",
+              "value": "={{ $json.type }}",
+              "type": "string"
+            },
+            {
+              "id": "7f9040f2-6178-46e4-a664-9e5dc4659f12",
+              "name": "name",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "8a1eb0f4-072a-4086-9358-cc0c6aa3e5a4",
+      "name": "Available Folders",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        540,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d6a8961a-5843-4c2d-bff0-f4107f16a4b7",
+              "leftValue": "={{ $json.type }}",
+              "rightValue": "file",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "b054aaa3-7af7-40da-bc33-569e512f7680",
+      "name": "If File",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        980,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "operation": "list",
+        "path": "={{ $('Set Folders').item.json.dropboxFolder }}/{{ $json.name }}/",
+        "returnAll": true,
+        "filters": {}
+      },
+      "id": "d5298856-89bf-417e-83a5-950aaec50ae3",
+      "name": "List Files",
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1,
+      "position": [
+        760,
+        160
+      ],
+      "credentials": {
+        "dropboxApi": {
+          "id": "Lgz0P6Oe8IoBB66P",
+          "name": "Mack Dropbox account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "4951b28c-9f68-47de-b729-a8576b009391",
+      "name": "Loop 1 Item",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        540,
+        380
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "bd9c1aca-2d02-4b5e-be76-9cde0f247b23",
+      "name": "Limit",
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        320,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d56d7884-8d50-43df-9f5e-f7fdd437289d",
+              "name": "dropboxFolder",
+              "value": "/n8n",
+              "type": "string"
+            },
+            {
+              "id": "f2244a46-8972-4346-b0dd-1891d3a34f42",
+              "name": "minioBucket",
+              "value": "n8n-demo",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "27c7cc62-e02d-4d8a-ab7d-99ca38678590",
+      "name": "Set Folders",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "# AlexK1919 \n![Alex Kim](https://media.licdn.com/dms/image/v2/D5603AQFOYMkqCPl6Sw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1718309808352?e=1736985600&v=beta&t=pQKm7lQfUU1ytuC2Gq1PRxNY-XmROFWbo-BjzUPxWOs)\n\n#### I’m Alex, an AI-Native Workflow Automation Architect Building Solutions to Optimize your Personal and Professional Life.\n\n\n### About Me\nhttps://beacons.ai/alexk1919\n\n### Link to my n8n Workflow Templates\nhttps://n8n.io/creators/alexk1919\n\n### YouTube Tutorials\nhttps://www.youtube.com/@alexk1919_",
+        "height": 830,
+        "width": 270,
+        "color": 6
+      },
+      "id": "4d8a50ea-55dd-4d85-8837-0cf31e8e80c5",
+      "name": "Sticky Note20",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -640,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# Triggers",
+        "height": 831,
+        "width": 247,
+        "color": 7
+      },
+      "id": "d58ed4bb-7923-4f22-a024-ec8b2f026283",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -340,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# Settings",
+        "height": 831,
+        "width": 247,
+        "color": 3
+      },
+      "id": "2dbde8be-f1bb-4e04-a83d-f7c5a6fb62ec",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -60,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "operation": "list",
+        "path": "={{ $json.dropboxFolder }}",
+        "filters": {}
+      },
+      "id": "3910215e-bb2d-4656-9cb2-58e7f859c6df",
+      "name": "List Folders",
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1,
+      "position": [
+        320,
+        160
+      ],
+      "credentials": {
+        "dropboxApi": {
+          "id": "Lgz0P6Oe8IoBB66P",
+          "name": "Mack Dropbox account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Dropbox to Minio",
+        "height": 831,
+        "width": 987,
+        "color": 4
+      },
+      "id": "c5f33fbe-3861-43ab-b800-06d0237796a7",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        220,
+        0
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Download File": {
+      "main": [
+        [
+          {
+            "node": "Upload to Minio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to Minio": {
+      "main": [
+        [
+          {
+            "node": "Get Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Set Folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Files": {
+      "main": [
+        [
+          {
+            "node": "File URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Available Folders": {
+      "main": [
+        [
+          {
+            "node": "List Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If File": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Files": {
+      "main": [
+        [
+          {
+            "node": "If File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop 1 Item": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Download File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Loop 1 Item",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Folders": {
+      "main": [
+        [
+          {
+            "node": "List Folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Folders": {
+      "main": [
+        [
+          {
+            "node": "Available Folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3a6978f2-6a1c-4359-b93d-9da60fb94357",
+  "meta": {
+    "instanceId": "d868e3d040e7bda892c81b17cf446053ea25d2556fcef89cbe19dd61a3e876e9"
+  },
+  "id": "HPuiOK5GipLpy1uU",
+  "tags": [
+    {
+      "createdAt": "2024-12-09T19:04:21.722Z",
+      "updatedAt": "2024-12-09T19:04:21.722Z",
+      "id": "c40B4y4TSFQjDhDC",
+      "name": "AlexK1919"
+    },
+    {
+      "createdAt": "2024-11-13T18:08:08.207Z",
+      "updatedAt": "2024-11-13T18:08:08.207Z",
+      "id": "nezaWFCGa7eZsVKu",
+      "name": "Utility"
+    },
+    {
+      "name": "Minio",
+      "id": "VO7y8az2cojRH4LG",
+      "createdAt": "2024-12-13T17:39:11.882Z",
+      "updatedAt": "2024-12-13T17:39:11.882Z"
+    },
+    {
+      "name": "Dropbox",
+      "id": "qXKOsR0cAX4QEPzg",
+      "createdAt": "2024-12-13T17:39:14.233Z",
+      "updatedAt": "2024-12-13T17:39:14.233Z"
+    }
+  ]
+}
