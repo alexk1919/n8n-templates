@@ -247,8 +247,8 @@
     },
     {
       "parameters": {
-        "content": "# AlexK1919 \n![Alex Kim](https://media.licdn.com/dms/image/v2/D5603AQFOYMkqCPl6Sw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1718309808352?e=1736985600&v=beta&t=pQKm7lQfUU1ytuC2Gq1PRxNY-XmROFWbo-BjzUPxWOs)\n\n#### I’m Alex, an AI-Native Workflow Automation Architect Building Solutions to Optimize your Personal and Professional Life.\n\n\n### About Me\nhttps://beacons.ai/alexk1919\n\n### Link to my n8n Workflow Templates\nhttps://n8n.io/creators/alexk1919\n\n### YouTube Tutorials\nhttps://www.youtube.com/@alexk1919_",
-        "height": 830,
+        "content": "# AlexK1919 \n![Alex Kim](https://media.licdn.com/dms/image/v2/D5603AQFOYMkqCPl6Sw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1718309808352?e=1736985600&v=beta&t=pQKm7lQfUU1ytuC2Gq1PRxNY-XmROFWbo-BjzUPxWOs)\n\n#### I’m Alex, an AI-Native Workflow Automation Architect Building Solutions to Optimize your Personal and Professional Life.\n\n\n### About Me\nhttps://beacons.ai/alexk1919\n\n### Link to this Workflow Template on Github\nhttps://github.com/alexk1919/n8n-templates/tree/main/dropbox-to-minio\n\n### Link to my n8n Workflow Templates\nhttps://n8n.io/creators/alexk1919\n\n### YouTube Tutorials\nhttps://www.youtube.com/@alexk1919_",
+        "height": 910,
         "width": 270,
         "color": 6
       },
@@ -264,7 +264,7 @@
     {
       "parameters": {
         "content": "# Triggers",
-        "height": 831,
+        "height": 911,
         "width": 247,
         "color": 7
       },
@@ -280,7 +280,7 @@
     {
       "parameters": {
         "content": "# Settings",
-        "height": 831,
+        "height": 911,
         "width": 247,
         "color": 3
       },
@@ -318,7 +318,7 @@
     {
       "parameters": {
         "content": "# Dropbox to Minio",
-        "height": 831,
+        "height": 911,
         "width": 987,
         "color": 4
       },
@@ -461,7 +461,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "3a6978f2-6a1c-4359-b93d-9da60fb94357",
+  "versionId": "173c9bed-a93f-4486-a792-1983a995f26c",
   "meta": {
     "instanceId": "d868e3d040e7bda892c81b17cf446053ea25d2556fcef89cbe19dd61a3e876e9"
   },
